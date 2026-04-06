@@ -37,5 +37,5 @@ interface InterClientInterface
     /**
      * @param array<string, mixed> $query
      */
-    public function list(string $path, array $query = []): PaginatedResponse;
+    public function list(string $path, string $collectionKey, array $query = []): PaginatedResponse;
 }

@@ -65,35 +65,35 @@ final readonly class InterClient implements InterClientInterface
         return new Response($this->handleResponse($response));
     }
 
-    public function list(string $path, array $query = []): PaginatedResponse
+    public function list(string $path, string $collectionKey, array $query = []): PaginatedResponse
     {
         $response = $this->request()->get($path, $query);
         $data = $this->handleResponse($response);
 
         /** @var list<array<string, mixed>> $items */
-        $items = $data['content'] ?? [];
+        $items = $data[$collectionKey] ?? [];
 
-        /** @var int $totalPages */
-        $totalPages = $data['totalPages'] ?? 1;
-        /** @var int $totalElements */
-        $totalElements = $data['totalElements'] ?? 0;
-        /** @var int $numberOfElements */
-        $numberOfElements = $data['numberOfElements'] ?? 0;
-        /** @var bool $last */
-        $last = $data['last'] ?? true;
-        /** @var bool $first */
-        $first = $data['first'] ?? true;
-        /** @var int $size */
-        $size = $data['size'] ?? 0;
+        /** @var int $totalPaginas */
+        $totalPaginas = $data['totalPaginas'] ?? 1;
+        /** @var int $totalElementos */
+        $totalElementos = $data['totalElementos'] ?? 0;
+        /** @var int $numeroDeElementos */
+        $numeroDeElementos = $data['numeroDeElementos'] ?? 0;
+        /** @var bool $ultimaPagina */
+        $ultimaPagina = $data['ultimaPagina'] ?? true;
+        /** @var bool $primeiraPagina */
+        $primeiraPagina = $data['primeiraPagina'] ?? true;
+        /** @var int $tamanhoPagina */
+        $tamanhoPagina = $data['tamanhoPagina'] ?? 0;
 
         return new PaginatedResponse(
             data: $items,
-            totalPages: $totalPages,
-            totalElements: $totalElements,
-            numberOfElements: $numberOfElements,
-            last: $last,
-            first: $first,
-            size: $size,
+            totalPaginas: $totalPaginas,
+            totalElementos: $totalElementos,
+            numeroDeElementos: $numeroDeElementos,
+            ultimaPagina: $ultimaPagina,
+            primeiraPagina: $primeiraPagina,
+            tamanhoPagina: $tamanhoPagina,
         );
     }
 

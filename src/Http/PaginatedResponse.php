@@ -19,12 +19,12 @@ final readonly class PaginatedResponse implements Countable, IteratorAggregate
      */
     public function __construct(
         public array $data,
-        public int $totalPages,
-        public int $totalElements,
-        public int $numberOfElements,
-        public bool $last,
-        public bool $first,
-        public int $size,
+        public int $totalPaginas,
+        public int $totalElementos,
+        public int $numeroDeElementos,
+        public bool $ultimaPagina,
+        public bool $primeiraPagina,
+        public int $tamanhoPagina,
     ) {}
 
     public function count(): int
