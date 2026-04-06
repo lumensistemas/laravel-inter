@@ -1,0 +1,64 @@
+{
+    "name": "lumensistemas/laravel-inter",
+    "description": "A Laravel package for integrating with Banco Inter API.",
+    "keywords": [
+        "lumensistemas",
+        "laravel-inter",
+        "banco-inter",
+        "api-integration",
+        "laravel"
+    ],
+    "homepage": "https://github.com/lumensistemas/laravel-inter",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lucas Vasconcelos",
+            "email": "lucasvscn@pm.me",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.4"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-type-coverage": "^4.0",
+        "laravel/pint": "^1.0",
+        "laravel/sail": "^1.55",
+        "rector/rector": "^2.0",
+        "orchestra/testbench": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LumenSistemas\\Inter\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LumenSistemas\\Inter\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "agent:analyse": "phpstan analyse --configuration=phpstan.neon --no-progress --error-format=json --memory-limit=512M",
+        "analyse": "phpstan analyse --memory-limit=512M",
+        "lint": ["rector process --memory-limit=512M", "pint"],
+        "test": "pest --bail",
+        "test:type-coverage": "pest --type-coverage --min=100 --memory-limit=512M",
+        "test:arch": "pest --testsuite=Arch",
+        "test:unit": "pest --testsuite=Unit",
+        "test:feature": "pest --testsuite=Feature",
+        "test:coverage": "pest --coverage --min=90",
+        "test:lint": ["rector process --dry-run --clear-cache --memory-limit=512M", "pint --test"],
+        "test:all": ["@test:lint", "@analyse", "@test:type-coverage", "@test:coverage"]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
