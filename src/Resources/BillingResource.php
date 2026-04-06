@@ -8,7 +8,7 @@ use LumenSistemas\Inter\Concerns\HasPagination;
 use LumenSistemas\Inter\Http\PaginatedResponse;
 use LumenSistemas\Inter\Http\Response;
 
-final class BillingResource extends Resource
+class BillingResource extends Resource
 {
     use HasPagination;
 

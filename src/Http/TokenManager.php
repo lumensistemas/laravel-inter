@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 use LumenSistemas\Inter\Enums\Environment;
 use LumenSistemas\Inter\Exceptions\AuthenticationException;
 
-final readonly class TokenManager
+readonly class TokenManager
 {
     private const int TTL_BUFFER = 100;
 

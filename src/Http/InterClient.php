@@ -18,7 +18,7 @@ use LumenSistemas\Inter\Exceptions\ServerException;
 use LumenSistemas\Inter\Exceptions\ValidationException;
 use Throwable;
 
-final readonly class InterClient implements InterClientInterface
+readonly class InterClient implements InterClientInterface
 {
     public function __construct(
         private TokenManager $tokenManager,
