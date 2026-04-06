@@ -9,7 +9,7 @@ use Exception;
 class InterException extends Exception
 {
     /**
-     * @param  list<array{razao: string, propriedade: string, valor: string}>  $violacoes
+     * @param list<array{razao: string, propriedade: string, valor: string}> $violacoes
      */
     public function __construct(
         string $message,

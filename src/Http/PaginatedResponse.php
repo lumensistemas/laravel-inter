@@ -15,7 +15,7 @@ use Traversable;
 final readonly class PaginatedResponse implements Countable, IteratorAggregate
 {
     /**
-     * @param  list<array<string, mixed>>  $data
+     * @param list<array<string, mixed>> $data
      */
     public function __construct(
         public array $data,

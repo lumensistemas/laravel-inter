@@ -40,7 +40,7 @@
         }
     },
     "scripts": {
-        "agent:analyse": "phpstan analyse --configuration=phpstan.neon --no-progress --error-format=json --memory-limit=512M",
+        "agent:analyse": "phpstan analyse --configuration=phpstan.neon.dist --no-progress --error-format=json --memory-limit=512M",
         "analyse": "phpstan analyse --memory-limit=512M",
         "lint": ["rector process --memory-limit=512M", "pint"],
         "test": "pest --bail",
