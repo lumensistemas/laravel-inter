@@ -7,6 +7,7 @@ return [
     'client_secret' => env('INTER_CLIENT_SECRET', ''),
     'certificate' => env('INTER_CERTIFICATE', ''),
     'private_key' => env('INTER_PRIVATE_KEY', ''),
+    'conta_corrente' => env('INTER_CONTA_CORRENTE', ''),
     'environment' => env('INTER_ENVIRONMENT', 'sandbox'),
     'scopes' => env('INTER_SCOPES', ''),
     'timeout' => (int) env('INTER_TIMEOUT', 30),

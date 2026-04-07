@@ -61,6 +61,16 @@
             "phpstan/extension-installer": true
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LumenSistemas\\Inter\\InterServiceProvider"
+            ],
+            "aliases": {
+                "Inter": "LumenSistemas\\Inter\\Facades\\Inter"
+            }
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }

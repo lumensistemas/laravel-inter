@@ -28,6 +28,7 @@ readonly class InterClient implements InterClientInterface
         private int $timeout,
         private int $retry,
         private string $userAgent,
+        private string $contaCorrente = '',
     ) {}
 
     public function get(string $path, array $query = []): Response
@@ -97,13 +98,26 @@ readonly class InterClient implements InterClientInterface
         );
     }
 
+    /**
+     * Request builder with common configuration for all requests, including
+     * authentication, headers, and retry logic.
+     *
+     * The retry logic will retry on any 5xx server error, with a delay of
+     * 100ms between attempts.
+     */
     private function request(): PendingRequest
     {
+        $headers = [
+            'Authorization' => 'Bearer '.$this->tokenManager->getToken(),
+            'User-Agent' => $this->userAgent,
+        ];
+
+        if ($this->contaCorrente !== '') {
+            $headers['x-conta-corrente'] = $this->contaCorrente;
+        }
+
         return Http::baseUrl($this->environment->baseUrl())
-            ->withHeaders([
-                'Authorization' => 'Bearer '.$this->tokenManager->getToken(),
-                'User-Agent' => $this->userAgent,
-            ])
+            ->withHeaders($headers)
             ->withOptions([
                 'cert' => $this->certificate,
                 'ssl_key' => $this->privateKey,
