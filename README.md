@@ -4,7 +4,7 @@
 [![Tests](https://img.shields.io/github/actions/workflow/status/lumensistemas/laravel-inter/package-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/lumensistemas/laravel-inter/actions/workflows/package-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/lumensistemas/laravel-inter.svg?style=flat-square)](https://packagist.org/packages/lumensistemas/laravel-inter)
 
-A typed, testable Laravel API client for [Banco Inter](https://developers.inter.co/). Supports boleto, Pix, banking operations, webhooks, and multi-tenancy with OAuth 2.0 + mTLS authentication.
+A typed, testable Laravel API client for [Banco Inter](https://developers.inter.co/). Supports billing (cobranca), multi-tenancy, and OAuth 2.0 + mTLS authentication.
 
 **Requirements:** PHP 8.4+, Laravel 12+
 
@@ -30,21 +30,25 @@ INTER_CLIENT_SECRET=your-client-secret
 INTER_CERTIFICATE=/path/to/certificate.crt
 INTER_PRIVATE_KEY=/path/to/private.key
 INTER_ENVIRONMENT=sandbox
+INTER_CONTA_CORRENTE=
 ```
 
 ## Usage
 
+### Billing (Cobranca)
+
 ```php
 use LumenSistemas\Inter\Facades\Inter;
 
-// Create a boleto
-$boleto = Inter::boletos()->create(
+// Issue a new billing (boleto + Pix QR code)
+$response = Inter::billing()->create(
     seuNumero: 'INV-001',
     valorNominal: 150.00,
     dataVencimento: '2026-05-01',
     numDiasAgenda: 30,
     pagador: [
         'cpfCnpj' => '12345678901',
+        'tipoPessoa' => 'FISICA',
         'nome' => 'John Doe',
         'endereco' => 'Rua Example, 123',
         'cidade' => 'Curitiba',
@@ -52,22 +56,36 @@ $boleto = Inter::boletos()->create(
         'cep' => '80000000',
     ],
 );
+// $response->data['codigoSolicitacao']
 
-// List boletos
-$boletos = Inter::boletos()->list(
+// Retrieve a billing
+$billing = Inter::billing()->find('abc-123-def');
+// $billing->data['cobranca'], $billing->data['boleto'], $billing->data['pix']
+
+// List billings (paginated)
+$page = Inter::billing()->list(
+    dataInicial: '2026-04-01',
+    dataFinal: '2026-04-30',
+    situacao: 'A_RECEBER',
+    tipoOrdenacao: 'DESC',
+);
+
+// Iterate through all pages automatically
+foreach (Inter::billing()->all(['dataInicial' => '2026-04-01', 'dataFinal' => '2026-04-30']) as $item) {
+    // ...
+}
+
+// Get billing PDF (base64)
+$pdf = Inter::billing()->pdf('abc-123-def');
+
+// Cancel a billing
+Inter::billing()->cancel('abc-123-def', 'APEDIDODOCLIENTE');
+
+// Summary grouped by status
+$summary = Inter::billing()->summary(
     dataInicial: '2026-04-01',
     dataFinal: '2026-04-30',
 );
-
-// Pix immediate charge
-$cobranca = Inter::pixCobrancas()->create(
-    calendario: ['expiracao' => 3600],
-    valor: ['original' => '100.00'],
-    chave: 'your-pix-key',
-);
-
-// Banking - check balance
-$saldo = Inter::banking()->balance();
 ```
 
 ### Multi-Tenancy
@@ -82,7 +100,7 @@ $tenant = Inter::client(
     privateKey: $tenant->inter_private_key_path,
 );
 
-$tenant->boletos()->create(...);
+$tenant->billing()->create(...);
 ```
 
 ## Testing
