@@ -13,5 +13,5 @@ arch()->preset()->security();
 // ──────────────────────────────────────────────────────────────
 
 arch('Source code uses strict types everywhere')
-    ->expect('LumenSistemas\Asaas')
+    ->expect('LumenSistemas\Inter')
     ->toUseStrictTypes();
