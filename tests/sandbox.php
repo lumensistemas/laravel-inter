@@ -24,6 +24,7 @@ use LumenSistemas\Inter\Exceptions\InterException;
 use LumenSistemas\Inter\Http\InterClient;
 use LumenSistemas\Inter\Http\TokenManager;
 use LumenSistemas\Inter\Resources\BillingResource;
+use LumenSistemas\Inter\Resources\BillingWebhookResource;
 
 // ──────────────────────────────────────────────────────────────
 // Load .env
@@ -81,6 +82,7 @@ $client = new InterClient(
 );
 
 $billing = new BillingResource($client);
+$billingWebhook = new BillingWebhookResource($client);
 
 // ──────────────────────────────────────────────────────────────
 // Helpers
@@ -160,5 +162,32 @@ function dump_response(string $label, mixed $data): void
 //     dump_response("Item #{$i}", $item);
 //     if ($i >= 4) break;
 // }
+
+// ──────────────────────────────────────────────────────────────
+// Billing Webhook
+// ──────────────────────────────────────────────────────────────
+
+// --- Create/update webhook ---
+// $response = $billingWebhook->create('https://example.com/webhooks/inter/billing');
+// dump_response('Create Webhook', $response->data);
+
+// --- Retrieve webhook ---
+// $response = $billingWebhook->retrieve();
+// dump_response('Retrieve Webhook', $response->data);
+
+// --- Delete webhook ---
+// $response = $billingWebhook->delete();
+// dump_response('Delete Webhook', $response->data);
+
+// --- Retrieve callbacks ---
+// $response = $billingWebhook->callbacks(
+//     dataHoraInicio: date('c', strtotime('-30 days')),
+//     dataHoraFim: date('c'),
+// );
+// dump_response('Webhook Callbacks', [
+//     'totalPaginas' => $response->totalPaginas,
+//     'totalElementos' => $response->totalElementos,
+//     'items' => $response->data,
+// ]);
 
 echo "\nSandbox ready. Uncomment the sections you want to test.\n";

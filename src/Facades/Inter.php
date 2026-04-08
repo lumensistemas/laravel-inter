@@ -9,6 +9,7 @@ use LumenSistemas\Inter\Inter as InterManager;
 
 /**
  * @method static \LumenSistemas\Inter\Resources\BillingResource billing()
+ * @method static \LumenSistemas\Inter\Resources\BillingWebhookResource billingWebhook()
  * @method static InterManager client(string $clientId, string $clientSecret, string $certificate, string $privateKey)
  *
  * @see InterManager

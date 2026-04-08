@@ -9,10 +9,13 @@ use LumenSistemas\Inter\Enums\Environment;
 use LumenSistemas\Inter\Http\InterClient;
 use LumenSistemas\Inter\Http\TokenManager;
 use LumenSistemas\Inter\Resources\BillingResource;
+use LumenSistemas\Inter\Resources\BillingWebhookResource;
 
 class Inter
 {
     private ?BillingResource $billingResource = null;
+
+    private ?BillingWebhookResource $billingWebhookResource = null;
 
     public function __construct(
         private readonly InterClientInterface $client,
@@ -71,5 +74,10 @@ class Inter
     public function billing(): BillingResource
     {
         return $this->billingResource ??= new BillingResource($this->client);
+    }
+
+    public function billingWebhook(): BillingWebhookResource
+    {
+        return $this->billingWebhookResource ??= new BillingWebhookResource($this->client);
     }
 }
