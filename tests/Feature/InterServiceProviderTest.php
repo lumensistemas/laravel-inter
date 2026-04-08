@@ -16,11 +16,23 @@ describe('service provider', function (): void {
         /** @var Illuminate\Config\Repository $config */
         $config = $this->app->make('config');
 
-        expect($config->get('inter.client_id'))->toBe('')
-            ->and($config->get('inter.environment'))->toBe('sandbox')
-            ->and($config->get('inter.timeout'))->toBe(30)
-            ->and($config->get('inter.cache_prefix'))->toBe('inter_token')
-            ->and($config->get('inter.conta_corrente'))->toBe('');
+        expect($config->get('inter'))->toBeArray()
+            ->toHaveKeys([
+                'client_id',
+                'client_secret',
+                'certificate',
+                'private_key',
+                'conta_corrente',
+                'environment',
+                'scopes',
+                'timeout',
+                'retry',
+                'user_agent',
+                'cache_prefix',
+                'webhook_token',
+            ])
+            ->and($config->get('inter.timeout'))->toBeInt()
+            ->and($config->get('inter.retry'))->toBeInt();
     });
 
     it('registers InterClientInterface as singleton', function (): void {

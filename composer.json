@@ -23,13 +23,14 @@
         "illuminate/http": "^12.0|^13.0"
     },
     "require-dev": {
-        "phpstan/phpstan": "^2.0",
-        "pestphp/pest": "^4.0",
-        "pestphp/pest-plugin-type-coverage": "^4.0",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.55",
-        "rector/rector": "^2.0",
-        "orchestra/testbench": "^10.0|^11.0"
+        "orchestra/testbench": "^10.0|^11.0",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-faker": "^4.0",
+        "pestphp/pest-plugin-type-coverage": "^4.0",
+        "phpstan/phpstan": "^2.0",
+        "rector/rector": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -50,7 +51,8 @@
         "test:arch": "pest --testsuite=Arch",
         "test:unit": "pest --testsuite=Unit",
         "test:feature": "pest --testsuite=Feature",
-        "test:coverage": "pest --coverage --min=90",
+        "test:integration": "pest --testsuite=Integration",
+        "test:coverage": "pest --coverage --min=90 --exclude-testsuite=Integration",
         "test:lint": ["rector process --dry-run --clear-cache --memory-limit=512M", "pint --test"],
         "test:all": ["@test:lint", "@analyse", "@test:type-coverage", "@test:coverage"]
     },

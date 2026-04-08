@@ -24,6 +24,11 @@ yarn-error.log
 .php_cs.cache
 .php-cs-fixer.cache
 
+# Environment
+.env
+.env.*
+!.env.example
+
 # Misc
 phpunit.xml
 phpstan.neon
@@ -32,3 +37,5 @@ testbench.yaml
 /docs
 /coverage
 /.claude
+*.crt
+*.key
