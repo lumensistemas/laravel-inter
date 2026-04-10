@@ -88,6 +88,28 @@ $summary = Inter::billing()->summary(
 );
 ```
 
+### Billing Webhooks
+
+```php
+use LumenSistemas\Inter\Facades\Inter;
+
+// Register a webhook URL
+Inter::billingWebhook()->create('https://example.com/webhooks/inter/billing');
+
+// Retrieve current webhook config
+$webhook = Inter::billingWebhook()->retrieve();
+// $webhook->data['webhookUrl'], $webhook->data['criacao']
+
+// Delete the webhook
+Inter::billingWebhook()->delete();
+
+// Retrieve callback delivery history
+$callbacks = Inter::billingWebhook()->callbacks(
+    dataHoraInicio: '2026-04-01T00:00:00Z',
+    dataHoraFim: '2026-04-30T23:59:59Z',
+);
+```
+
 ### Multi-Tenancy
 
 Each tenant can use its own credentials:
@@ -106,8 +128,20 @@ $tenant->billing()->create(...);
 ## Testing
 
 ```bash
-composer test
+composer test                # Unit + Feature tests
+composer test:integration    # Integration tests (requires .env credentials)
 ```
+
+### Webhook Development
+
+Start a local webhook receiver and register it with Inter's sandbox:
+
+```bash
+composer webhook:serve       # Start receiver on port 8008
+composer webhook:register    # Register TEST_EXPOSE_URL from .env with Inter
+```
+
+Use [Expose](https://expose.dev) or ngrok to tunnel the local server to a public URL.
 
 ## Changelog
 
