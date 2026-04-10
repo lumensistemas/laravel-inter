@@ -49,8 +49,8 @@ if ($webhookUrl === '') {
 }
 
 // Append /webhook path if it's just a base URL
-if (! str_contains($webhookUrl, '/webhook')) {
-    $webhookUrl = rtrim($webhookUrl, '/').'/webhook';
+if (!str_contains($webhookUrl, '/webhook')) {
+    $webhookUrl = mb_rtrim($webhookUrl, '/').'/webhook';
 }
 
 // ── Build client ────────────────────────────────────────────

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Inter Webhook Receiver
+ * Inter Webhook Receiver.
  *
  * A lightweight PHP built-in server script that records incoming webhook
  * payloads to disk for inspection during development.
@@ -26,8 +26,8 @@ declare(strict_types=1);
 
 $storageDir = __DIR__.'/logs/webhooks';
 
-if (! is_dir($storageDir)) {
-    mkdir($storageDir, 0755, true);
+if (!is_dir($storageDir)) {
+    mkdir($storageDir, 0o755, true);
 }
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -69,7 +69,7 @@ function readEvents(string $dir): array
             continue;
         }
 
-        /** @var array<string, mixed>|null $decoded */
+        /** @var null|array<string, mixed> $decoded */
         $decoded = json_decode($content, true);
 
         if (is_array($decoded)) {
@@ -124,10 +124,10 @@ if ($method === 'POST') {
         respond(400, ['error' => 'Empty request body']);
     }
 
-    /** @var array<string, mixed>|null $decoded */
+    /** @var null|array<string, mixed> $decoded */
     $decoded = json_decode($body, true);
 
-    if (! is_array($decoded)) {
+    if (!is_array($decoded)) {
         respond(400, ['error' => 'Request body is not valid JSON']);
     }
 
