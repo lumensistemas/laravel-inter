@@ -23,6 +23,7 @@
         "illuminate/http": "^12.0|^13.0"
     },
     "require-dev": {
+        "beyondcode/expose": "^3.2",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.55",
         "orchestra/testbench": "^10.0|^11.0",
@@ -54,7 +55,9 @@
         "test:integration": "pest --testsuite=Integration",
         "test:coverage": "pest --coverage --min=90 --exclude-testsuite=Integration",
         "test:lint": ["rector process --dry-run --clear-cache --memory-limit=512M", "pint --test"],
-        "test:all": ["@test:lint", "@analyse", "@test:type-coverage", "@test:coverage"]
+        "test:all": ["@test:lint", "@analyse", "@test:type-coverage", "@test:coverage"],
+        "webhook:serve": "php -S 0.0.0.0:8008 scripts/webhook-server.php",
+        "webhook:register": "php scripts/register-webhook.php"
     },
     "config": {
         "sort-packages": true,

@@ -99,32 +99,32 @@ function dump_response(string $label, mixed $data): void
 // ──────────────────────────────────────────────────────────────
 
 // --- Create a billing ---
-// try {
-//     $response = $billing->create(
-//         seuNumero: 'SNDB-'.time(),
-//         valorNominal: 10.50,
-//         dataVencimento: date('Y-m-d', strtotime('+30 days')),
-//         numDiasAgenda: 30,
-//         pagador: [
-//             'cpfCnpj' => '12345678901234',
-//             'tipoPessoa' => 'JURIDICA',
-//             'nome' => 'Empresa Teste',
-//             'endereco' => 'Rua Teste',
-//             'numero' => '123',
-//             'bairro' => 'Centro',
-//             'cidade' => 'Curitiba',
-//             'uf' => 'PR',
-//             'cep' => '80000000',
-//         ],
-//     );
-//     dump_response('Create Billing', $response->data);
-// } catch (InterException $e) {
-//     dump_response('Create Billing Error', [
-//         'message' => $e->getMessage(),
-//         'violacoes' => $e->violacoes,
-//     ]);
-//     exit(1);
-// }
+try {
+    $response = $billing->create(
+        seuNumero: 'SNDB-'.time(),
+        valorNominal: 10.50,
+        dataVencimento: date('Y-m-d', strtotime('+30 days')),
+        numDiasAgenda: 30,
+        pagador: [
+            'cpfCnpj' => '12345678901234',
+            'tipoPessoa' => 'JURIDICA',
+            'nome' => 'Empresa Teste',
+            'endereco' => 'Rua Teste',
+            'numero' => '123',
+            'bairro' => 'Centro',
+            'cidade' => 'Curitiba',
+            'uf' => 'PR',
+            'cep' => '80000000',
+        ],
+    );
+    dump_response('Create Billing', $response->data);
+} catch (InterException $e) {
+    dump_response('Create Billing Error', [
+        'message' => $e->getMessage(),
+        'violacoes' => $e->violacoes,
+    ]);
+    exit(1);
+}
 
 // --- Find a billing ---
 // $response = $billing->find('040a5a28-2841-4cd0-a80c-5dd89661624d');
