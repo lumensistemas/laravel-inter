@@ -104,6 +104,54 @@ describe('find', function (): void {
     });
 });
 
+describe('update', function (): void {
+    it('sends PATCH with both fields', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('patch')
+            ->once()
+            ->withArgs(fn (string $path, array $data): bool => $path === '/cobranca/v3/cobrancas/abc-123'
+                && $data['dataVencimento'] === '2026-06-15'
+                && $data['valorNominal'] === 200.00)
+            ->andReturn(new Response([]));
+
+        createBillingResource($client)->update(
+            codigoSolicitacao: 'abc-123',
+            dataVencimento: '2026-06-15',
+            valorNominal: 200.00,
+        );
+    });
+
+    it('sends PATCH with only dataVencimento', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('patch')
+            ->once()
+            ->withArgs(fn (string $path, array $data): bool => $path === '/cobranca/v3/cobrancas/abc-123'
+                && $data['dataVencimento'] === '2026-06-15'
+                && !array_key_exists('valorNominal', $data))
+            ->andReturn(new Response([]));
+
+        createBillingResource($client)->update(
+            codigoSolicitacao: 'abc-123',
+            dataVencimento: '2026-06-15',
+        );
+    });
+
+    it('sends PATCH with only valorNominal', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('patch')
+            ->once()
+            ->withArgs(fn (string $path, array $data): bool => $path === '/cobranca/v3/cobrancas/abc-123'
+                && $data['valorNominal'] === 200.00
+                && !array_key_exists('dataVencimento', $data))
+            ->andReturn(new Response([]));
+
+        createBillingResource($client)->update(
+            codigoSolicitacao: 'abc-123',
+            valorNominal: 200.00,
+        );
+    });
+});
+
 describe('list', function (): void {
     it('sends GET with required date range', function (): void {
         $client = Mockery::mock(InterClientInterface::class);

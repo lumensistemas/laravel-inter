@@ -96,6 +96,30 @@ class BillingResource extends Resource
     }
 
     /**
+     * Update the due date and/or nominal value of an existing billing.
+     *
+     * ```php
+     * $inter->billing()->update(
+     *     codigoSolicitacao: 'abc-123-def',
+     *     dataVencimento: '2026-06-15',
+     *     valorNominal: 200.00,
+     * );
+     * ```
+     *
+     * @return Response Empty response on success
+     */
+    public function update(
+        string $codigoSolicitacao,
+        ?string $dataVencimento = null,
+        ?float $valorNominal = null,
+    ): Response {
+        return $this->client->patch($this->resourcePath().'/'.$codigoSolicitacao, $this->filterNulls([
+            'dataVencimento' => $dataVencimento,
+            'valorNominal' => $valorNominal,
+        ]));
+    }
+
+    /**
      * Retrieve a paginated collection of billings within a date range.
      *
      * ```php
