@@ -120,6 +120,22 @@ class BillingResource extends Resource
     }
 
     /**
+     * Check the processing status of a billing update.
+     *
+     * ```php
+     * $response = $inter->billing()->updateStatus('edit-456-def');
+     *
+     * $response->data['status']; // "PROCESSANDO", "SUCESSO", or "FALHA"
+     * ```
+     *
+     * @return Response Response data: {status} (PROCESSANDO|SUCESSO|FALHA)
+     */
+    public function updateStatus(string $codigoEdicao): Response
+    {
+        return $this->client->get($this->resourcePath().'/edicao/'.$codigoEdicao);
+    }
+
+    /**
      * Retrieve a paginated collection of billings within a date range.
      *
      * ```php

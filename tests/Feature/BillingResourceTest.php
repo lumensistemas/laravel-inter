@@ -152,6 +152,20 @@ describe('update', function (): void {
     });
 });
 
+describe('updateStatus', function (): void {
+    it('sends GET to the edicao endpoint', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('get')
+            ->once()
+            ->with('/cobranca/v3/cobrancas/edicao/edit-456-def')
+            ->andReturn(new Response(['status' => 'SUCESSO']));
+
+        $response = createBillingResource($client)->updateStatus('edit-456-def');
+
+        expect($response->data['status'])->toBe('SUCESSO');
+    });
+});
+
 describe('list', function (): void {
     it('sends GET with required date range', function (): void {
         $client = Mockery::mock(InterClientInterface::class);
