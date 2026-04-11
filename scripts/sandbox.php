@@ -148,6 +148,22 @@ try {
 // );
 // dump_response('Summary', $response->data);
 
+// --- Update a billing ---
+// $response = $billing->update(
+//     codigoSolicitacao: 'PASTE-CODIGO-SOLICITACAO-HERE',
+//     dataVencimento: date('Y-m-d', strtotime('+60 days')),
+//     valorNominal: 25.00,
+// );
+// dump_response('Update Billing', $response->data);
+
+// --- Check update status ---
+// $response = $billing->updateStatus('PASTE-CODIGO-EDICAO-HERE');
+// dump_response('Update Status', $response->data);
+
+// --- Pay a billing (sandbox only) ---
+// $response = $billing->pay('PASTE-CODIGO-SOLICITACAO-HERE', 'PIX');
+// dump_response('Pay Billing', $response->data);
+
 // --- Cancel a billing ---
 // $response = $billing->cancel('PASTE-CODIGO-SOLICITACAO-HERE', 'A PEDIDO DO CLIENTE');
 // dump_response('Cancel', $response->data);
