@@ -333,6 +333,29 @@ describe('cancel', function (): void {
     });
 });
 
+describe('pay', function (): void {
+    it('sends POST with pagarCom to the pagar endpoint', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('isSandbox')->andReturn(true);
+        $client->shouldReceive('post')
+            ->once()
+            ->withArgs(fn (string $path, array $data): bool => $path === '/cobranca/v3/cobrancas/abc-123/pagar'
+                && $data['pagarCom'] === 'PIX')
+            ->andReturn(new Response([]));
+
+        $response = createBillingResource($client)->pay('abc-123', 'PIX');
+
+        expect($response->data)->toBe([]);
+    });
+
+    it('throws RuntimeException when not in sandbox', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('isSandbox')->andReturn(false);
+
+        createBillingResource($client)->pay('abc-123', 'BOLETO');
+    })->throws(RuntimeException::class, 'The pay method is only available in the sandbox environment.');
+});
+
 describe('summary', function (): void {
     it('sends GET with date range and returns summary items', function (): void {
         $client = Mockery::mock(InterClientInterface::class);

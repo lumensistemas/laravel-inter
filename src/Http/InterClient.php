@@ -98,6 +98,11 @@ readonly class InterClient implements InterClientInterface
         );
     }
 
+    public function isSandbox(): bool
+    {
+        return $this->environment === Environment::Sandbox;
+    }
+
     /**
      * Request builder with common configuration for all requests, including
      * authentication, headers, and retry logic.

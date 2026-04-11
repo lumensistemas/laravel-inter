@@ -7,6 +7,7 @@ namespace LumenSistemas\Inter\Resources;
 use LumenSistemas\Inter\Concerns\HasPagination;
 use LumenSistemas\Inter\Http\PaginatedResponse;
 use LumenSistemas\Inter\Http\Response;
+use RuntimeException;
 
 class BillingResource extends Resource
 {
@@ -202,6 +203,32 @@ class BillingResource extends Resource
     {
         return $this->client->post($this->resourcePath().'/'.$codigoSolicitacao.'/cancelar', [
             'motivoCancelamento' => $motivoCancelamento,
+        ]);
+    }
+
+    /**
+     * Force payment confirmation of a billing (sandbox only).
+     *
+     * Once paid, the webhook is triggered for that billing.
+     *
+     * ```php
+     * $inter->billing()->pay('abc-123-def', 'PIX');
+     * ```
+     *
+     * @param string $pagarCom Payment method: "BOLETO" or "PIX"
+     *
+     * @throws RuntimeException If called outside the sandbox environment
+     *
+     * @return Response Empty response on success
+     */
+    public function pay(string $codigoSolicitacao, string $pagarCom): Response
+    {
+        if (!$this->client->isSandbox()) {
+            throw new RuntimeException('The pay method is only available in the sandbox environment.');
+        }
+
+        return $this->client->post($this->resourcePath().'/'.$codigoSolicitacao.'/pagar', [
+            'pagarCom' => $pagarCom,
         ]);
     }
 
