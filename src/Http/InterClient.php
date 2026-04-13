@@ -115,6 +115,7 @@ readonly class InterClient implements InterClientInterface
         $headers = [
             'Authorization' => 'Bearer '.$this->tokenManager->getToken(),
             'User-Agent' => $this->userAgent,
+            'Accept' => 'application/json, application/problem+json',
         ];
 
         if ($this->contaCorrente !== '') {
@@ -130,7 +131,6 @@ readonly class InterClient implements InterClientInterface
             ->timeout($this->timeout)
             ->retry($this->retry, 100, fn (?Throwable $exception, PendingRequest $request): bool => $exception instanceof \Illuminate\Http\Client\RequestException
                 && $exception->response->status() >= 500, throw: false)
-            ->acceptJson()
             ->asJson();
     }
 
