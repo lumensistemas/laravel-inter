@@ -104,6 +104,68 @@ describe('find', function (): void {
     });
 });
 
+describe('update', function (): void {
+    it('sends PATCH with both fields', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('patch')
+            ->once()
+            ->withArgs(fn (string $path, array $data): bool => $path === '/cobranca/v3/cobrancas/abc-123'
+                && $data['dataVencimento'] === '2026-06-15'
+                && $data['valorNominal'] === 200.00)
+            ->andReturn(new Response([]));
+
+        createBillingResource($client)->update(
+            codigoSolicitacao: 'abc-123',
+            dataVencimento: '2026-06-15',
+            valorNominal: 200.00,
+        );
+    });
+
+    it('sends PATCH with only dataVencimento', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('patch')
+            ->once()
+            ->withArgs(fn (string $path, array $data): bool => $path === '/cobranca/v3/cobrancas/abc-123'
+                && $data['dataVencimento'] === '2026-06-15'
+                && !array_key_exists('valorNominal', $data))
+            ->andReturn(new Response([]));
+
+        createBillingResource($client)->update(
+            codigoSolicitacao: 'abc-123',
+            dataVencimento: '2026-06-15',
+        );
+    });
+
+    it('sends PATCH with only valorNominal', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('patch')
+            ->once()
+            ->withArgs(fn (string $path, array $data): bool => $path === '/cobranca/v3/cobrancas/abc-123'
+                && $data['valorNominal'] === 200.00
+                && !array_key_exists('dataVencimento', $data))
+            ->andReturn(new Response([]));
+
+        createBillingResource($client)->update(
+            codigoSolicitacao: 'abc-123',
+            valorNominal: 200.00,
+        );
+    });
+});
+
+describe('updateStatus', function (): void {
+    it('sends GET to the edicao endpoint', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('get')
+            ->once()
+            ->with('/cobranca/v3/cobrancas/edicao/edit-456-def')
+            ->andReturn(new Response(['status' => 'SUCESSO']));
+
+        $response = createBillingResource($client)->updateStatus('edit-456-def');
+
+        expect($response->data['status'])->toBe('SUCESSO');
+    });
+});
+
 describe('list', function (): void {
     it('sends GET with required date range', function (): void {
         $client = Mockery::mock(InterClientInterface::class);
@@ -269,6 +331,29 @@ describe('cancel', function (): void {
 
         expect($response->data)->toBe([]);
     });
+});
+
+describe('pay', function (): void {
+    it('sends POST with pagarCom to the pagar endpoint', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('isSandbox')->andReturn(true);
+        $client->shouldReceive('post')
+            ->once()
+            ->withArgs(fn (string $path, array $data): bool => $path === '/cobranca/v3/cobrancas/abc-123/pagar'
+                && $data['pagarCom'] === 'PIX')
+            ->andReturn(new Response([]));
+
+        $response = createBillingResource($client)->pay('abc-123', 'PIX');
+
+        expect($response->data)->toBe([]);
+    });
+
+    it('throws RuntimeException when not in sandbox', function (): void {
+        $client = Mockery::mock(InterClientInterface::class);
+        $client->shouldReceive('isSandbox')->andReturn(false);
+
+        createBillingResource($client)->pay('abc-123', 'BOLETO');
+    })->throws(RuntimeException::class, 'The pay method is only available in the sandbox environment.');
 });
 
 describe('summary', function (): void {

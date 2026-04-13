@@ -99,32 +99,32 @@ function dump_response(string $label, mixed $data): void
 // ──────────────────────────────────────────────────────────────
 
 // --- Create a billing ---
-try {
-    $response = $billing->create(
-        seuNumero: 'SNDB-'.time(),
-        valorNominal: 10.50,
-        dataVencimento: date('Y-m-d', strtotime('+30 days')),
-        numDiasAgenda: 30,
-        pagador: [
-            'cpfCnpj' => '12345678901234',
-            'tipoPessoa' => 'JURIDICA',
-            'nome' => 'Empresa Teste',
-            'endereco' => 'Rua Teste',
-            'numero' => '123',
-            'bairro' => 'Centro',
-            'cidade' => 'Curitiba',
-            'uf' => 'PR',
-            'cep' => '80000000',
-        ],
-    );
-    dump_response('Create Billing', $response->data);
-} catch (InterException $e) {
-    dump_response('Create Billing Error', [
-        'message' => $e->getMessage(),
-        'violacoes' => $e->violacoes,
-    ]);
-    exit(1);
-}
+// try {
+//     $response = $billing->create(
+//         seuNumero: 'SNDB-'.time(),
+//         valorNominal: 10.50,
+//         dataVencimento: '2026-04-25', //date('Y-m-d', strtotime('+30 days')),
+//         numDiasAgenda: 30,
+//         pagador: [
+//             'cpfCnpj' => '12345678901234',
+//             'tipoPessoa' => 'JURIDICA',
+//             'nome' => 'Empresa Teste',
+//             'endereco' => 'Rua Teste',
+//             'numero' => '123',
+//             'bairro' => 'Centro',
+//             'cidade' => 'Curitiba',
+//             'uf' => 'PR',
+//             'cep' => '80000000',
+//         ],
+//     );
+//     dump_response('Create Billing', $response->data);
+// } catch (InterException $e) {
+//     dump_response('Create Billing Error', [
+//         'message' => $e->getMessage(),
+//         'violacoes' => $e->violacoes,
+//     ]);
+//     exit(1);
+// }
 
 // --- Find a billing ---
 // $response = $billing->find('040a5a28-2841-4cd0-a80c-5dd89661624d');
@@ -147,6 +147,22 @@ try {
 //     dataFinal: date('Y-m-d'),
 // );
 // dump_response('Summary', $response->data);
+
+// --- Update a billing ---
+// $response = $billing->update(
+//     codigoSolicitacao: 'df7730f7-3b4a-41b8-898f-25f7d1a6c1bf',
+//     dataVencimento: '2026-04-30', //date('Y-m-d', strtotime('+60 days')),
+//     valorNominal: 25.00,
+// );
+// dump_response('Update Billing', $response->data);
+
+// --- Check update status ---
+// $response = $billing->updateStatus('PASTE-CODIGO-EDICAO-HERE');
+// dump_response('Update Status', $response->data);
+
+// --- Pay a billing (sandbox only) ---
+// $response = $billing->pay('a545219a-0e66-49a5-9390-251a92a2120d', 'PIX');
+// dump_response('Pay Billing', $response->data);
 
 // --- Cancel a billing ---
 // $response = $billing->cancel('PASTE-CODIGO-SOLICITACAO-HERE', 'A PEDIDO DO CLIENTE');
@@ -189,5 +205,11 @@ try {
 //     'totalElementos' => $response->totalElementos,
 //     'items' => $response->data,
 // ]);
+
+// --- Retry callbacks ---
+// $response = $billingWebhook->retryCallbacks([
+//     '2039852d-23c5-4403-9ed1-943ada9e35fb',
+// ]);
+// dump_response('Retry Callbacks', $response->data);
 
 echo "\nSandbox ready. Uncomment the sections you want to test.\n";

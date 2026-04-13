@@ -83,6 +83,24 @@ class BillingWebhookResource extends Resource
         ]));
     }
 
+    /**
+     * Request the API to re-send webhook callbacks for the given codigoSolicitacao IDs.
+     *
+     * ```php
+     * $inter->billingWebhook()->retryCallbacks(['a1b2c3...', 'd4e5f6...']);
+     * ```
+     *
+     * @param list<string> $codigoSolicitacao Up to 50 UUIDs
+     *
+     * @return Response Empty response on success
+     */
+    public function retryCallbacks(array $codigoSolicitacao): Response
+    {
+        return $this->client->post($this->resourcePath().'/callbacks/retry', [
+            'codigoSolicitacao' => $codigoSolicitacao,
+        ]);
+    }
+
     protected function resourcePath(): string
     {
         return '/cobranca/v3/cobrancas/webhook';

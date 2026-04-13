@@ -7,6 +7,7 @@ namespace LumenSistemas\Inter\Resources;
 use LumenSistemas\Inter\Concerns\HasPagination;
 use LumenSistemas\Inter\Http\PaginatedResponse;
 use LumenSistemas\Inter\Http\Response;
+use RuntimeException;
 
 class BillingResource extends Resource
 {
@@ -96,6 +97,46 @@ class BillingResource extends Resource
     }
 
     /**
+     * Update the due date and/or nominal value of an existing billing.
+     *
+     * ```php
+     * $inter->billing()->update(
+     *     codigoSolicitacao: 'abc-123-def',
+     *     dataVencimento: '2026-06-15',
+     *     valorNominal: 200.00,
+     * );
+     * ```
+     *
+     * @return Response Empty response on success
+     */
+    public function update(
+        string $codigoSolicitacao,
+        ?string $dataVencimento = null,
+        ?float $valorNominal = null,
+    ): Response {
+        return $this->client->patch($this->resourcePath().'/'.$codigoSolicitacao, $this->filterNulls([
+            'dataVencimento' => $dataVencimento,
+            'valorNominal' => $valorNominal,
+        ]));
+    }
+
+    /**
+     * Check the processing status of a billing update.
+     *
+     * ```php
+     * $response = $inter->billing()->updateStatus('edit-456-def');
+     *
+     * $response->data['status']; // "PROCESSANDO", "SUCESSO", or "FALHA"
+     * ```
+     *
+     * @return Response Response data: {status} (PROCESSANDO|SUCESSO|FALHA)
+     */
+    public function updateStatus(string $codigoEdicao): Response
+    {
+        return $this->client->get($this->resourcePath().'/edicao/'.$codigoEdicao);
+    }
+
+    /**
      * Retrieve a paginated collection of billings within a date range.
      *
      * ```php
@@ -162,6 +203,32 @@ class BillingResource extends Resource
     {
         return $this->client->post($this->resourcePath().'/'.$codigoSolicitacao.'/cancelar', [
             'motivoCancelamento' => $motivoCancelamento,
+        ]);
+    }
+
+    /**
+     * Force payment confirmation of a billing (sandbox only).
+     *
+     * Once paid, the webhook is triggered for that billing.
+     *
+     * ```php
+     * $inter->billing()->pay('abc-123-def', 'PIX');
+     * ```
+     *
+     * @param string $pagarCom Payment method: "BOLETO" or "PIX"
+     *
+     * @throws RuntimeException If called outside the sandbox environment
+     *
+     * @return Response Empty response on success
+     */
+    public function pay(string $codigoSolicitacao, string $pagarCom): Response
+    {
+        if (!$this->client->isSandbox()) {
+            throw new RuntimeException('The pay method is only available in the sandbox environment.');
+        }
+
+        return $this->client->post($this->resourcePath().'/'.$codigoSolicitacao.'/pagar', [
+            'pagarCom' => $pagarCom,
         ]);
     }
 
